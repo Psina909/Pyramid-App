@@ -90,6 +90,24 @@ void MainWindow::make_layer(QImage &image)
     image = blur.scaled(w, h);
 }
 
+void MainWindow::make_pyramid(QImage &image)
+{
+    scene->clear();
+
+    //Adding original image to the scene
+    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
+    scene->addItem(item);
+
+    //Bulding other layers and adding them to the scene
+    while((qMin(image.height(),image.width()))!=1)
+    {
+        make_layer(image);
+        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
+        scene->addItem(item);
+    }
+
+}
+
 void MainWindow::on_actionOpen_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this,"Open Image File",QDir::currentPath(),"Images(*.png, *.jpg)");

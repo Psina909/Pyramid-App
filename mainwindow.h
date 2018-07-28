@@ -17,6 +17,8 @@ public:
     ~MainWindow();
 
     void make_layer(QImage &image); //Builds next layer of the pyramid
+    void make_pyramid(QImage &image); //Builds pyramid in the scene
+
 private slots:
     void on_actionOpen_triggered();
 
