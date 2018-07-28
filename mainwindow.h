@@ -28,6 +28,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    QString fileName; //Filename of the image
 
     //Graphics objects
     QGraphicsScene* scene;
