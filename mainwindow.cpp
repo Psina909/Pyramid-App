@@ -173,3 +173,16 @@ void MainWindow::on_actionAbout_triggered()
 {
 
 }
+
+void MainWindow::on_comboBox_activated(int index)
+{
+    //Get image
+    QImage image(fileName);
+    if(image.isNull())
+    {
+        QMessageBox::information(this,"Image Viewer","Error: Can't display image");
+        return;
+    }
+    //Draw layer
+    show_layer(image, index);
+}
