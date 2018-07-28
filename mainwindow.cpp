@@ -6,6 +6,7 @@
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
 #include <QMatrix3x3>
+#include <QtMath>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -91,6 +92,20 @@ void MainWindow::make_layer(QImage &image)
 }
 
 void MainWindow::make_pyramid(QImage &image)
+void MainWindow::fill_comboBox_Layers(QImage &image)
+{
+    if(!(ui->comboBox->isEnabled()))
+        ui->comboBox->setEnabled(true);
+
+    ui->comboBox->clear();
+
+    int N = qLn(qMin(image.height(),image.width()))/qLn(2); //Number of layers
+
+    //Fill comboBox with numbers of layers
+    for(int i=0; i<=N; i++)
+        ui->comboBox->addItem(QVariant(i).toString());
+}
+
 {
     scene->clear();
 
