@@ -22,16 +22,16 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="leftMargin">
-     <number>19</number>
+     <number>29</number>
     </property>
     <property name="topMargin">
-     <number>19</number>
+     <number>29</number>
     </property>
     <property name="rightMargin">
-     <number>19</number>
+     <number>29</number>
     </property>
     <property name="bottomMargin">
-     <number>19</number>
+     <number>4</number>
     </property>
     <item>
      <widget class="QGraphicsView" name="graphicsView"/>
