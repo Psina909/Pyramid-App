@@ -125,21 +125,28 @@ void MainWindow::fill_comboBox_Layers(QImage &image)
 
 void MainWindow::on_actionOpen_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,"Open Image File",QDir::currentPath(),"Images(*.png, *.jpg)");
+    //Get image
+    fileName = QFileDialog::getOpenFileName(this,"Open Image File",QDir::currentPath(),"Images(*.png, *.jpg)");
 
-        if(!fileName.isEmpty())
+    if(!fileName.isEmpty())
+    {
+        QImage image(fileName);
+        if(image.isNull())
         {
-            QImage image(fileName);
-            if(image.isNull())
-            {
-                QMessageBox::information(this,"Image Viewer","Error: Can't display image");
-                return;
-            }
-
-            //Building pyramid
-            make_pyramid(image);
-            ui->graphicsView->setScene(scene);
+            QMessageBox::information(this,"Image Viewer","Error: Can't display image");
+            return;
         }
+
+        //Fill comboBox of Layers
+        fill_comboBox_Layers(image);
+
+        //Add original image to the scene
+        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
+        scene->addItem(item);
+
+        ui->label->setText("Size: "+QVariant(image.width()).toString()+"x"+QVariant(image.height()).toString());
+        ui->graphicsView->setScene(scene);
+    }
 }
 
 void MainWindow::on_actionExit_triggered()
