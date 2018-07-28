@@ -122,8 +122,8 @@ void MainWindow::on_actionOpen_triggered()
                 return;
             }
 
-            QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
-            scene->addItem(item);
+            //Building pyramid
+            make_pyramid(image);
             ui->graphicsView->setScene(scene);
         }
 }
