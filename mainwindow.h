@@ -16,6 +16,7 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+    void make_layer(QImage &image); //Builds next layer of the pyramid
 private slots:
     void on_actionOpen_triggered();
 
