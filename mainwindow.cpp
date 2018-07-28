@@ -115,7 +115,6 @@ void MainWindow::on_actionOpen_triggered()
         if(!fileName.isEmpty())
         {
             QImage image(fileName);
-
             if(image.isNull())
             {
                 QMessageBox::information(this,"Image Viewer","Error: Can't display image");
