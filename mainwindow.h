@@ -17,7 +17,7 @@ public:
     ~MainWindow();
 
     void make_layer(QImage &image); //Builds next layer of the pyramid
-    void make_pyramid(QImage &image); //Builds pyramid in the scene
+    void show_layer(QImage &image, int layer); //Adds needed layer to the scene
     void fill_comboBox_Layers(QImage &image); //Fills comboBox with numbers of layers
 
 private slots:

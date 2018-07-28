@@ -84,14 +84,13 @@ void MainWindow::make_layer(QImage &image)
         }
     }
 
-    //Scaling
+    //Scale
     int h = image.height()/2;
     int w = image.width()/2;
 
     image = blur.scaled(w, h);
 }
 
-void MainWindow::make_pyramid(QImage &image)
 void MainWindow::fill_comboBox_Layers(QImage &image)
 {
     if(!(ui->comboBox->isEnabled()))
@@ -106,21 +105,37 @@ void MainWindow::fill_comboBox_Layers(QImage &image)
         ui->comboBox->addItem(QVariant(i).toString());
 }
 
+void MainWindow::show_layer(QImage &image, int layer)
 {
     scene->clear();
 
-    //Adding original image to the scene
-    QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
-    scene->addItem(item);
+    int w = image.width(); //Original widght
+    int h = image.height(); //Original height
 
-    //Bulding other layers and adding them to the scene
-    while((qMin(image.height(),image.width()))!=1)
+    if(layer == 0)
     {
-        make_layer(image);
+        //Add original image to the scene
+        QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
+        scene->addItem(item);
+
+        //Show size of the image
+        ui->label->setText("Size: "+QVariant(image.width()).toString()+"x"+QVariant(image.height()).toString());
+    }
+    else
+    {
+        //Build needed layer
+        for(int i=0; i!=layer; i++)
+            make_layer(image);
+
+        //Show size of the layer
+        ui->label->setText("Size: "+QVariant(image.width()).toString()+"x"+QVariant(image.height()).toString());
+
+        image = image.scaled(w,h);//Scale to original resolution
+
+        //Add this layer to the scene
         QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
         scene->addItem(item);
     }
-
 }
 
 void MainWindow::on_actionOpen_triggered()
