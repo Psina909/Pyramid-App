@@ -154,6 +154,19 @@ void MainWindow::show_layer(QImage &image, int layer)
     }
 }
 
+bool MainWindow::isAvailable(QImage &image)
+{
+    if(image.isNull())
+    {
+        //To prevent mistakes
+        ui->comboBox->setEnabled(false);
+        ui->doubleSpinBox->setEnabled(false);
+        QMessageBox::information(this,"Image Viewer","ERROR: Can't display image");
+        scene->clear();
+        return false;
+    } else return true;
+}
+
 void MainWindow::on_actionOpen_triggered()
 {
     //Get image
@@ -162,30 +175,28 @@ void MainWindow::on_actionOpen_triggered()
     if(!fileName.isEmpty())
     {
         QImage image(fileName);
-        if(image.isNull())
-        {
-            QMessageBox::information(this,"Image Viewer","ERROR: Can't display image");
-            return;
-        }
 
-        double diag = qSqrt(image.width()*image.width()+image.height()*image.height()); //Diagonal
-
-        //Check if this image is already opened
-        if(!map.contains(QVariant(diag).toInt(),fileName))
+        if(isAvailable(image))
         {
-            map.insert(QVariant(diag).toInt(),fileName);
-        }
-        else
-        {
-            QMessageBox::information(this,"Image Viewer","This image is already opened!");
-            return;
-        }
+            double diag = qSqrt(image.width()*image.width()+image.height()*image.height()); //Diagonal
 
-        rebuild_comboBox_files(); //Fill comboBox of files with actual information
-        ui->comboBox_2->setCurrentText(fileName);
-        fill_comboBox_Layers(image); //Fill comboBox of Layers
-        show_layer(image,0); //Add original image to the scene
-        ui->graphicsView->setScene(scene);
+            //Check if this image is already opened
+            if(!map.contains(QVariant(diag).toInt(),fileName))
+            {
+                map.insert(QVariant(diag).toInt(),fileName);
+            }
+            else
+            {
+                QMessageBox::information(this,"Image Viewer","This image is already opened!");
+                return;
+            }
+
+            rebuild_comboBox_files(); //Fill comboBox of files with actual information
+            ui->comboBox_2->setCurrentText(fileName);
+            fill_comboBox_Layers(image); //Fill comboBox of Layers
+            show_layer(image,0); //Add original image to the scene
+            ui->graphicsView->setScene(scene);
+        }
     }
 }
 
@@ -203,13 +214,9 @@ void MainWindow::on_comboBox_activated(int index)
 {
     //Get image
     QImage image(ui->comboBox_2->currentText());
-    if(image.isNull())
-    {
-        QMessageBox::information(this,"Image Viewer","ERROR: Can't display image");
-        return;
-    }
 
-    show_layer(image, index);//Draw layer
+    if(isAvailable(image))
+        show_layer(image, index);//Draw layer
 }
 
 void MainWindow::on_comboBox_2_activated(const QString &arg1)
@@ -218,12 +225,12 @@ void MainWindow::on_comboBox_2_activated(const QString &arg1)
 
     //Get image
     QImage image(arg1);
-    if(image.isNull())
-    {
-        QMessageBox::information(this,"Image Viewer","ERROR: Can't display image");
-        return;
-    }
 
-    fill_comboBox_Layers(image); //Fill comboBox of Layers
-    show_layer(image,0);//Add original image to the scene
+    if(isAvailable(image))
+    {
+        fill_comboBox_Layers(image); //Fill comboBox of Layers
+        show_layer(image,0);//Add original image to the scene
+    }    
+}
+
 }

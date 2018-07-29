@@ -21,6 +21,7 @@ public:
     void show_layer(QImage &image, int layer); //Adds needed layer to the scene
     void fill_comboBox_Layers(QImage &image); //Fills comboBox with numbers of layers
     void rebuild_comboBox_files(); // Updates comboBox of files with actual information
+    bool isAvailable(QImage &image); // Checks if image is not null, prevent mistakes
 
 private slots:
     void on_actionOpen_triggered();
