@@ -97,6 +97,8 @@ void MainWindow::fill_comboBox_Layers(QImage &image)
 {
     if(!(ui->comboBox->isEnabled()))
         ui->comboBox->setEnabled(true);
+    if(!(ui->doubleSpinBox->isEnabled()))
+        ui->doubleSpinBox->setEnabled(true);
 
     ui->comboBox->clear();
 
@@ -233,4 +235,16 @@ void MainWindow::on_comboBox_2_activated(const QString &arg1)
     }    
 }
 
+void MainWindow::on_doubleSpinBox_valueChanged(double arg1)
+{
+    coeff = arg1;
+
+    //Get image
+    QImage image(ui->comboBox_2->currentText());
+
+    if(isAvailable(image))
+    {
+        fill_comboBox_Layers(image);
+        show_layer(image, 0);
+    }
 }

@@ -29,6 +29,7 @@ private slots:
     void on_actionAbout_triggered();
     void on_comboBox_activated(int index); //comboBox of layers
     void on_comboBox_2_activated(const QString &arg1); //comboBox of files
+    void on_doubleSpinBox_valueChanged(double arg1); // SpinBox for scale coefficient
 
 private:
     Ui::MainWindow *ui;
