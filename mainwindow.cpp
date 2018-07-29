@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete scene;
+    delete view;
 }
 
 void MainWindow::make_layer(QImage &image)
