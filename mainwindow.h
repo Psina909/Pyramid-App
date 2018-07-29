@@ -25,7 +25,7 @@ private slots:
     void on_actionOpen_triggered();
     void on_actionExit_triggered();
     void on_actionAbout_triggered();
-    void on_comboBox_activated(int index);
+    void on_comboBox_activated(int index); //comboBox of layers
 
 private:
     Ui::MainWindow *ui;

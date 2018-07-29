@@ -39,8 +39,8 @@ void MainWindow::make_layer(QImage &image)
     {
         for(int j=1; j<image.height()-1; j++)
         {
-            // *****************************************************
             float red = 0, green = 0, blue = 0;
+            // =====================================================
             red =
                     kernel(0, 0) * qRed(image.pixel(i+1, j+1)) +
                     kernel(0, 1) * qRed(image.pixel(i, j+1)) +
@@ -54,7 +54,7 @@ void MainWindow::make_layer(QImage &image)
                     kernel(2, 1) * qRed(image.pixel(i, j-1)) +
                     kernel(2, 2) * qRed(image.pixel(i-1, j-1));
 
-            // *****************************************************
+            // ======================================================
             green =
                     kernel(0, 0) * qGreen(image.pixel(i+1, j+1)) +
                     kernel(0, 1) * qGreen(image.pixel(i, j+1)) +
@@ -68,7 +68,7 @@ void MainWindow::make_layer(QImage &image)
                     kernel(2, 1) * qGreen(image.pixel(i, j-1)) +
                     kernel(2, 2) * qGreen(image.pixel(i-1, j-1));
 
-            // *****************************************************
+            // ======================================================
             blue =
                     kernel(0, 0) * qBlue(image.pixel(i+1, j+1)) +
                     kernel(0, 1) * qBlue(image.pixel(i, j+1)) +
@@ -150,7 +150,7 @@ void MainWindow::on_actionOpen_triggered()
         QImage image(fileName);
         if(image.isNull())
         {
-            QMessageBox::information(this,"Image Viewer","Error: Can't display image");
+            QMessageBox::information(this,"Image Viewer","ERROR: Can't display image");
             return;
         }
 
@@ -182,9 +182,11 @@ void MainWindow::on_comboBox_activated(int index)
     QImage image(fileName);
     if(image.isNull())
     {
-        QMessageBox::information(this,"Image Viewer","Error: Can't display image");
+        QMessageBox::information(this,"Image Viewer","ERROR: Can't display image");
         return;
     }
-    //Draw layer
-    show_layer(image, index);
+
+    show_layer(image, index);//Draw layer
+}
+
 }
