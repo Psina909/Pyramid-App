@@ -33,6 +33,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QMultiMap<int, QString> map; // contains <diagonal, fileName>
+    double coeff = 2; //scale coefficient
 
     //Graphics objects
     QGraphicsScene* scene;

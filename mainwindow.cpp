@@ -87,8 +87,8 @@ void MainWindow::make_layer(QImage &image)
     }
 
     //Scale
-    int h = image.height()/2;
-    int w = image.width()/2;
+    int h = qCeil(image.height()/coeff);
+    int w = qCeil(image.width()/coeff);
 
     image = blur.scaled(w, h);
 }
