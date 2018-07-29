@@ -26,6 +26,7 @@ private slots:
     void on_actionExit_triggered();
     void on_actionAbout_triggered();
     void on_comboBox_activated(int index); //comboBox of layers
+    void on_comboBox_2_activated(const QString &arg1); //comboBox of files
 
 private:
     Ui::MainWindow *ui;

@@ -189,4 +189,18 @@ void MainWindow::on_comboBox_activated(int index)
     show_layer(image, index);//Draw layer
 }
 
+void MainWindow::on_comboBox_2_activated(const QString &arg1)
+{
+    scene->clear();
+
+    //Get image
+    QImage image(arg1);
+    if(image.isNull())
+    {
+        QMessageBox::information(this,"Image Viewer","ERROR: Can't display image");
+        return;
+    }
+
+    fill_comboBox_Layers(image); //Fill comboBox of Layers
+    show_layer(image,0);//Add original image to the scene
 }
