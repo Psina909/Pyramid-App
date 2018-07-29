@@ -102,7 +102,25 @@ void MainWindow::fill_comboBox_Layers(QImage &image)
 
     ui->comboBox->clear();
 
-    int N = qFloor(qLn(qMin(image.height(),image.width()))/qLn(2)); //Number of layers
+    int N=0; //Number of layers
+    int w = image.width();
+    int h = image.height();
+
+    int w1 = 0, h1 = 0; // width and height on the previos step
+
+    // Find number of layers
+    while(qMin(w,h)!=1)
+    {
+        w = qCeil(w/coeff);
+        h = qCeil(h/coeff);
+
+        if(w == w1 && h==h1) //Check if image is not scaling anymore
+            break;
+
+        w1 = w;
+        h1 = h;
+        ++N;
+    }
 
     //Fill comboBox with numbers of layers
     for(int i=0; i<=N; i++)
