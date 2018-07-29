@@ -33,14 +33,14 @@ void MainWindow::make_layer(QImage &image)
     kernel(0, 0) = 1; kernel(0, 1) = 2; kernel(0, 2) = 1;
     kernel(1, 0) = 2; kernel(1, 1) = 4; kernel(1, 2) = 2;
     kernel(2, 0) = 1; kernel(2, 1) = 2; kernel(2, 2) = 1;
-    int kernel_sum = 16.0;
+    float kernel_sum = 16.0;
 
     for(int i=1; i<image.width()-1; i++)
     {
         for(int j=1; j<image.height()-1; j++)
         {
-            int red = 0, green = 0, blue = 0;
             // *****************************************************
+            float red = 0, green = 0, blue = 0;
             red =
                     kernel(0, 0) * qRed(image.pixel(i+1, j+1)) +
                     kernel(0, 1) * qRed(image.pixel(i, j+1)) +
@@ -82,7 +82,7 @@ void MainWindow::make_layer(QImage &image)
                     kernel(2, 1) * qBlue(image.pixel(i, j-1)) +
                     kernel(2, 2) * qBlue(image.pixel(i-1, j-1));
 
-            blur.setPixel(i,j, qRgb(red/kernel_sum, green/kernel_sum, blue/kernel_sum));
+            blur.setPixel(i,j, qRgb(QVariant(red/kernel_sum).toInt(), QVariant(green/kernel_sum).toInt(), QVariant(blue/kernel_sum).toInt()));
         }
     }
 
@@ -100,7 +100,7 @@ void MainWindow::fill_comboBox_Layers(QImage &image)
 
     ui->comboBox->clear();
 
-    int N = qLn(qMin(image.height(),image.width()))/qLn(2); //Number of layers
+    int N = qFloor(qLn(qMin(image.height(),image.width()))/qLn(2)); //Number of layers
 
     //Fill comboBox with numbers of layers
     for(int i=0; i<=N; i++)
