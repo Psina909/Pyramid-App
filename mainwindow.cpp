@@ -107,6 +107,20 @@ void MainWindow::fill_comboBox_Layers(QImage &image)
         ui->comboBox->addItem(QVariant(i).toString());
 }
 
+void MainWindow::rebuild_comboBox_files()
+{
+    if(!(ui->comboBox_2->isEnabled()))
+        ui->comboBox_2->setEnabled(true);
+
+    ui->comboBox_2->clear();
+
+    //Fill comboBox of files with actual information
+    QMultiMap<int,QString>::iterator it = map.begin();
+    for(; it != map.end(); ++it)
+        ui->comboBox_2->addItem(it.value());
+
+}
+
 void MainWindow::show_layer(QImage &image, int layer)
 {
     scene->clear();
