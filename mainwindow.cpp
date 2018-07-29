@@ -227,7 +227,7 @@ void MainWindow::on_actionExit_triggered()
 
 void MainWindow::on_actionAbout_triggered()
 {
-
+QMessageBox::information(this,"About","v5-0-0: Open any image (.png, .jpg) and select any layer of the Gaussian pyramid. It will be scaled to original resolution. You can open several images. You can also select the scaling coefficient.");
 }
 
 void MainWindow::on_comboBox_activated(int index)
