@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <QMultiMap>
 
 namespace Ui {
 class MainWindow;
@@ -28,7 +29,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QString fileName; //Filename of the image
+    QMultiMap<int, QString> map; // contains <diagonal, fileName>
 
     //Graphics objects
     QGraphicsScene* scene;
