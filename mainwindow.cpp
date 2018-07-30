@@ -5,7 +5,6 @@
 #include <QMessageBox>
 #include <QGraphicsView>
 #include <QGraphicsPixmapItem>
-#include <QMatrix3x3>
 #include <QtMath>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -22,123 +21,6 @@ MainWindow::~MainWindow()
     delete ui;
     delete scene;
     delete view;
-}
-
-void MainWindow::make_layer(QImage &image)
-{
-    //Gaussian blur algorithm
-    QImage blur = image;
-
-    QMatrix3x3 kernel;
-    kernel(0, 0) = 1; kernel(0, 1) = 2; kernel(0, 2) = 1;
-    kernel(1, 0) = 2; kernel(1, 1) = 4; kernel(1, 2) = 2;
-    kernel(2, 0) = 1; kernel(2, 1) = 2; kernel(2, 2) = 1;
-    float kernel_sum = 16.0;
-
-    for(int i=1; i<image.width()-1; i++)
-    {
-        for(int j=1; j<image.height()-1; j++)
-        {
-            float red = 0, green = 0, blue = 0;
-            // =====================================================
-            red =
-                    kernel(0, 0) * qRed(image.pixel(i+1, j+1)) +
-                    kernel(0, 1) * qRed(image.pixel(i, j+1)) +
-                    kernel(0, 2) * qRed(image.pixel(i-1, j+1)) +
-
-                    kernel(1, 0) * qRed(image.pixel(i+1, j)) +
-                    kernel(1, 1) * qRed(image.pixel(i, j)) +
-                    kernel(1, 2) * qRed(image.pixel(i-1, j)) +
-
-                    kernel(2, 0) * qRed(image.pixel(i+1, j-1)) +
-                    kernel(2, 1) * qRed(image.pixel(i, j-1)) +
-                    kernel(2, 2) * qRed(image.pixel(i-1, j-1));
-
-            // ======================================================
-            green =
-                    kernel(0, 0) * qGreen(image.pixel(i+1, j+1)) +
-                    kernel(0, 1) * qGreen(image.pixel(i, j+1)) +
-                    kernel(0, 2) * qGreen(image.pixel(i-1, j+1)) +
-
-                    kernel(1, 0) * qGreen(image.pixel(i+1, j)) +
-                    kernel(1, 1) * qGreen(image.pixel(i, j)) +
-                    kernel(1, 2) * qGreen(image.pixel(i-1, j)) +
-
-                    kernel(2, 0) * qGreen(image.pixel(i+1, j-1)) +
-                    kernel(2, 1) * qGreen(image.pixel(i, j-1)) +
-                    kernel(2, 2) * qGreen(image.pixel(i-1, j-1));
-
-            // ======================================================
-            blue =
-                    kernel(0, 0) * qBlue(image.pixel(i+1, j+1)) +
-                    kernel(0, 1) * qBlue(image.pixel(i, j+1)) +
-                    kernel(0, 2) * qBlue(image.pixel(i-1, j+1)) +
-
-                    kernel(1, 0) * qBlue(image.pixel(i+1, j)) +
-                    kernel(1, 1) * qBlue(image.pixel(i, j)) +
-                    kernel(1, 2) * qBlue(image.pixel(i-1, j)) +
-
-                    kernel(2, 0) * qBlue(image.pixel(i+1, j-1)) +
-                    kernel(2, 1) * qBlue(image.pixel(i, j-1)) +
-                    kernel(2, 2) * qBlue(image.pixel(i-1, j-1));
-
-            blur.setPixel(i,j, qRgb(QVariant(red/kernel_sum).toInt(), QVariant(green/kernel_sum).toInt(), QVariant(blue/kernel_sum).toInt()));
-        }
-    }
-
-    //Scale
-    int h = qCeil(image.height()/coeff);
-    int w = qCeil(image.width()/coeff);
-
-    image = blur.scaled(w, h);
-}
-
-void MainWindow::fill_comboBox_Layers(QImage &image)
-{
-    if(!(ui->comboBox->isEnabled()))
-        ui->comboBox->setEnabled(true);
-    if(!(ui->doubleSpinBox->isEnabled()))
-        ui->doubleSpinBox->setEnabled(true);
-
-    ui->comboBox->clear();
-
-    int N=0; //Number of layers
-    int w = image.width();
-    int h = image.height();
-
-    int w1 = 0, h1 = 0; // width and height on the previos step
-
-    // Find number of layers
-    while(qMin(w,h)!=1)
-    {
-        w = qCeil(w/coeff);
-        h = qCeil(h/coeff);
-
-        if(w == w1 && h==h1) //Check if image is not scaling anymore
-            break;
-
-        w1 = w;
-        h1 = h;
-        ++N;
-    }
-
-    //Fill comboBox with numbers of layers
-    for(int i=0; i<=N; i++)
-        ui->comboBox->addItem(QVariant(i).toString());
-}
-
-void MainWindow::rebuild_comboBox_files()
-{
-    if(!(ui->comboBox_2->isEnabled()))
-        ui->comboBox_2->setEnabled(true);
-
-    ui->comboBox_2->clear();
-
-    //Fill comboBox of files with actual information
-    QMultiMap<int,QString>::iterator it = map.begin();
-    for(; it != map.end(); ++it)
-        ui->comboBox_2->addItem(it.value());
-
 }
 
 void MainWindow::show_layer(QImage &image, int layer)
@@ -160,8 +42,7 @@ void MainWindow::show_layer(QImage &image, int layer)
     else
     {
         //Build needed layer
-        for(int i=0; i!=layer; i++)
-            make_layer(image);
+        pyramid.make_layer(image, layer);
 
         //Show size of the layer
         ui->label->setText("Size: "+QVariant(image.width()).toString()+"x"+QVariant(image.height()).toString());
@@ -172,6 +53,36 @@ void MainWindow::show_layer(QImage &image, int layer)
         QGraphicsPixmapItem* item = new QGraphicsPixmapItem(QPixmap::fromImage(image));
         scene->addItem(item);
     }
+}
+
+void MainWindow::fill_comboBox_Layers(QImage &image)
+{
+    if(!(ui->comboBox->isEnabled()))
+        ui->comboBox->setEnabled(true);
+    if(!(ui->doubleSpinBox->isEnabled()))
+        ui->doubleSpinBox->setEnabled(true);
+
+    ui->comboBox->clear();
+
+    int N = pyramid.numer_of_layer(image);
+
+    //Fill comboBox with numbers of layers
+    for(int i=0; i<=N; i++)
+        ui->comboBox->addItem(QVariant(i).toString());
+}
+
+void MainWindow::rebuild_comboBox_files()
+{
+    if(!(ui->comboBox_2->isEnabled()))
+        ui->comboBox_2->setEnabled(true);
+
+    ui->comboBox_2->clear();
+
+    //Fill comboBox of files with actual information
+    QMultiMap<int,QString>::iterator it = map.begin();
+    for(; it != map.end(); ++it)
+        ui->comboBox_2->addItem(it.value());
+
 }
 
 bool MainWindow::isAvailable(QImage &image)
@@ -255,7 +166,7 @@ void MainWindow::on_comboBox_2_activated(const QString &arg1)
 
 void MainWindow::on_doubleSpinBox_valueChanged(double arg1)
 {
-    coeff = arg1;
+    pyramid.set_coeff(arg1);
 
     //Get image
     QImage image(ui->comboBox_2->currentText());

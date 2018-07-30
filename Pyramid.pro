@@ -24,10 +24,12 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+    gaussian_pyramid.cpp
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+    gaussian_pyramid.h
 
 FORMS += \
         mainwindow.ui

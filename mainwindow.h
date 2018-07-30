@@ -3,7 +3,8 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
-#include <QMultiMap>
+#include "gaussian_pyramid.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -17,7 +18,6 @@ public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    void make_layer(QImage &image); //Builds next layer of the pyramid
     void show_layer(QImage &image, int layer); //Adds needed layer to the scene
     void fill_comboBox_Layers(QImage &image); //Fills comboBox with numbers of layers
     void rebuild_comboBox_files(); // Updates comboBox of files with actual information
@@ -34,7 +34,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QMultiMap<int, QString> map; // contains <diagonal, fileName>
-    double coeff = 2; //scale coefficient
+    Gaussian_Pyramid pyramid; // Pyramid object
 
     //Graphics objects
     QGraphicsScene* scene;
